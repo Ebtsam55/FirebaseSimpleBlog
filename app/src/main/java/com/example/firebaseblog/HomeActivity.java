@@ -21,6 +21,8 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 public class HomeActivity extends AppCompatActivity {
@@ -40,8 +42,9 @@ public class HomeActivity extends AppCompatActivity {
         mBlogList = findViewById(R.id.blog_list);
         mBlogList.setHasFixedSize(true);
         mBlogList.setLayoutManager(new LinearLayoutManager(this));
-        mRef = FirebaseDatabase.getInstance().getReference();
-        blogRef =mRef.child("Blog");
+        blogRef = FirebaseDatabase.getInstance().getReference().child("Blog");
+        blogRef.keepSynced(true);
+
 
 
 
@@ -100,11 +103,24 @@ public class HomeActivity extends AppCompatActivity {
             post_desc.setText(desc);
         }
 
-        public  void setImage (Context ctx, String img)
+        public  void setImage (final Context ctx, final String img)
         {
-            ImageView post_image= mView.findViewById(R.id.post_image);
-            Picasso.with(ctx).load(img).into(post_image);
-            Log.i("statuss",img);
+            final ImageView post_image= mView.findViewById(R.id.post_image);
+
+            // Load images from disk cache with Picasso if offline
+            Picasso.with(ctx).load(img).networkPolicy(NetworkPolicy.OFFLINE).into(post_image, new Callback() {
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError() {
+                    Picasso.with(ctx).load(img).into(post_image);
+                }
+            });
+
+
         }
 
     }
