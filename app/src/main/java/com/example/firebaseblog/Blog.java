@@ -2,16 +2,18 @@ package com.example.firebaseblog;
 
 public class Blog {
 
-    private  String title,image,description ;
+    private  String title,image,description,userName ;
 
     public  Blog ()
     {}
 
 
-    public Blog(String title, String image, String description) {
+    public Blog(String title, String image, String description, String userName) {
         this.title = title;
         this.image = image;
         this.description = description;
+        this.userName=userName;
+
     }
 
     public String getTitle() {
@@ -36,5 +38,13 @@ public class Blog {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 }

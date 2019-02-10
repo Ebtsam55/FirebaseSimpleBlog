@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name"> Blog</string>
+
+
+    <string name="internetConnectionError">check your Internet Connection </string>
+    <string name="signUpMsg">Signing up </string>
+    <string name="signInMsg">Checking Logs</string>
+
+    <!-- TODO: Register Activity -->
+
+    <string name="signUpFailed">This Email already exists</string>
+    <string name="signUpDataProblem">One or more fields are incorrect</string>
+    <string name="invalidForm">Invalid Mail Form</string>
+    <string name="invalidUsername">Invalid Username</string>
+    <string name="passCharLess">Password must be 8 characters at least</string>
+
+    <!-- TODO: Log In Activity -->
+    <string name="loginDataProblem">Invalid Email/Password</string>
+    <string name="logInFailed"> you need to setup your account </string>
+
 </resources>

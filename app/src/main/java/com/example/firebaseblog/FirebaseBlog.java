@@ -2,22 +2,27 @@ package com.example.firebaseblog;
 
 import android.app.Application;
 
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.database.FirebaseDatabase;
 import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
+
+// this class for enabling Database Offline Capabilities
 
 public class FirebaseBlog extends Application {
 
     public  void onCreate () {
 
         super.onCreate();
-        FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        if(!FirebaseApp.getApps(this).isEmpty()) {
+            FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        }
 
-
+     // this code for enabling picasso with of line mode
         Picasso.Builder builder= new Picasso.Builder(this);
         builder.downloader(new OkHttpDownloader(this,Integer.MAX_VALUE));
         Picasso built = builder.build();
-        built.setIndicatorsEnabled(true);
+        built.setIndicatorsEnabled(false);
         built.setLoggingEnabled(true);
         Picasso.setSingletonInstance(built);
 
