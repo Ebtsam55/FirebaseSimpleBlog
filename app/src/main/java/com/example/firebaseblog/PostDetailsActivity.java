@@ -1,5 +1,6 @@
 package com.example.firebaseblog;
 
+<<<<<<< HEAD
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -29,11 +30,21 @@ public class PostDetailsActivity extends AppCompatActivity {
     private Button removeButton;
     private FirebaseAuth mAuth;
 
+=======
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
+import android.widget.Toast;
+
+public class PostDetailsActivity extends AppCompatActivity {
+
+>>>>>>> origin/master
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_details);
 
+<<<<<<< HEAD
 
         postImage = findViewById(R.id.post_image);
         postTitle = findViewById (R.id.post_title);
@@ -93,3 +104,9 @@ public class PostDetailsActivity extends AppCompatActivity {
 
     }
 }
+=======
+        String post_key = getIntent().getExtras().getString("blog_id");
+        Toast.makeText(getApplicationContext(),post_key,Toast.LENGTH_SHORT).show();
+    }
+}
+>>>>>>> origin/master
