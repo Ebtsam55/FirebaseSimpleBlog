@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#00574B</color>
     <color name="colorAccent">#D8671B</color>
     <color name="backGround">#F5F1C5</color>
+    <color name="heart_on">#BB0606</color>
 </resources>

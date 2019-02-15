@@ -3,10 +3,6 @@ package com.example.firebaseblog;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import androidx.annotation.NonNull;
-import com.google.android.material.snackbar.Snackbar;
-import androidx.core.content.ContextCompat;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -24,6 +20,7 @@ import com.google.android.gms.common.SignInButton;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -35,6 +32,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
+
 public class LoginActivity extends AppCompatActivity {
     private EditText signMail, signPass;
     private Button signInButton, signUpButton;
@@ -44,12 +45,11 @@ public class LoginActivity extends AppCompatActivity {
     private InternetConnection internetConnection;
     private Drawable errorIcon;
     private boolean successfulLogin;
-    private String emailRes,passRes;
+    private String emailRes, passRes;
     private ProgressDialog progressDialog;
     private SignInButton mGoogleSignInButton;
     private GoogleSignInClient mGoogleSignInClient;
-    private static  final int RC_SIGN_IN=22;
-
+    private static final int RC_SIGN_IN = 22;
 
 
     @Override
@@ -59,8 +59,8 @@ public class LoginActivity extends AppCompatActivity {
         internetConnection = new InternetConnection();
         initViews();
 
-       //Establishing Connection with firebase..
-        mDatabaseUsers= FirebaseDatabase.getInstance().getReference().child("Users");
+        //Establishing Connection with firebase..
+        mDatabaseUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         mDatabaseUsers.keepSynced(true);
 
         mAuth = FirebaseAuth.getInstance();
@@ -83,14 +83,12 @@ public class LoginActivity extends AppCompatActivity {
         });
 
 
-
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });
-
 
 
         signInButton.setOnClickListener(new View.OnClickListener() {
@@ -144,21 +142,19 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void startLogIn(String mail, String pass)
-    {
+    private void startLogIn(String mail, String pass) {
         progressDialog.setMessage(getApplicationContext().getResources().getString(R.string.signInMsg));
         progressDialog.show();
 
-        mAuth.signInWithEmailAndPassword(mail,pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
+        mAuth.signInWithEmailAndPassword(mail, pass).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
-                if(task.isSuccessful()) {
-                  progressDialog.dismiss();
-                  checkIfUserExit();
-                }
-                else
-                {    progressDialog.dismiss();
-                                     Toast.makeText(getApplicationContext(),"Log in failed ", Toast.LENGTH_LONG).show();
+                if (task.isSuccessful()) {
+                    progressDialog.dismiss();
+                    checkIfUserExit();
+                } else {
+                    progressDialog.dismiss();
+                    Toast.makeText(getApplicationContext(), "Log in failed ", Toast.LENGTH_LONG).show();
                 }
 
             }
@@ -211,7 +207,6 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
     // Google Sign In
 
     private void signInWithGoogle() {
@@ -223,22 +218,28 @@ public class LoginActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        progressDialog.setMessage("start signing in ....");
-        progressDialog.show();
+        if (internetConnection.checkConnection(getApplicationContext())) {
 
-        // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                GoogleSignInAccount account = task.getResult(ApiException.class);
-                firebaseAuthWithGoogle(account);
-            } catch (ApiException e) {
-                // Google Sign In failed, update UI appropriately
-                Log.i("statuss", "Google sign in failed", e);
-                progressDialog.dismiss();
+            progressDialog.setMessage("start signing in ....");
+            progressDialog.show();
 
+            // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
+            if (requestCode == RC_SIGN_IN) {
+                Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+                try {
+                    // Google Sign In was successful, authenticate with Firebase
+                    GoogleSignInAccount account = task.getResult(ApiException.class);
+                    firebaseAuthWithGoogle(account);
+                } catch (ApiException e) {
+                    // Google Sign In failed, update UI appropriately
+                    Log.i("statuss", "Google sign in failed", e);
+                    progressDialog.dismiss();
+
+                }
             }
+        } else {
+            Toast.makeText(getApplicationContext(), "Check your Internet connection", Toast.LENGTH_LONG)
+                    .show();
         }
     }
 
@@ -270,15 +271,14 @@ public class LoginActivity extends AppCompatActivity {
     }
 
 
-
-        private void initViews() {
+    private void initViews() {
         signMail = findViewById(R.id.email_field);
         signPass = findViewById(R.id.pass_field);
         signInButton = findViewById(R.id.sign_in);
         signUpButton = findViewById(R.id.sign_up);
-        mGoogleSignInButton =findViewById(R.id.google_signin);
+        mGoogleSignInButton = findViewById(R.id.google_signin);
         errorIcon = (Drawable) ContextCompat.getDrawable(this, R.drawable.ic_error);
-        progressDialog=new ProgressDialog(this);
+        progressDialog = new ProgressDialog(this);
 
     }
 }

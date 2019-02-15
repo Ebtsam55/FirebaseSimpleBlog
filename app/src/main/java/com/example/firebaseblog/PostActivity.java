@@ -4,8 +4,6 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +24,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 
 public class PostActivity extends AppCompatActivity {
 
@@ -147,9 +148,7 @@ public class PostActivity extends AppCompatActivity {
                                                 startActivity(new Intent(PostActivity.this, HomeActivity.class));
 
                                                 Toast.makeText(getApplicationContext(), "Uploaded Done !", Toast.LENGTH_LONG).show();
-                                            }
-                                            else
-                                            {
+                                            } else {
                                                 Toast.makeText(getApplicationContext(), "Uploading Failed", Toast.LENGTH_LONG).show();
                                             }
 

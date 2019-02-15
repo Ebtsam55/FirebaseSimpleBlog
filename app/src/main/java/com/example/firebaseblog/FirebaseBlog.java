@@ -18,7 +18,7 @@ public class FirebaseBlog extends Application {
             FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         }
 
-     // this code for enabling picasso with of line mode
+     // this code for enabling picasso with offline mode
         Picasso.Builder builder= new Picasso.Builder(this);
         builder.downloader(new OkHttpDownloader(this,Integer.MAX_VALUE));
         Picasso built = builder.build();
