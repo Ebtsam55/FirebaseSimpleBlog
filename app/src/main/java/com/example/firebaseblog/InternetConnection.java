@@ -7,7 +7,7 @@ import android.net.NetworkInfo;
 public class InternetConnection {
 
     /** CHECK WHETHER INTERNET CONNECTION IS AVAILABLE OR NOT */
-    public static boolean checkConnection(Context context) {
+    public static boolean isConnected(Context context) {
         final ConnectivityManager connMgr = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
 
         NetworkInfo activeNetworkInfo = connMgr.getActiveNetworkInfo();

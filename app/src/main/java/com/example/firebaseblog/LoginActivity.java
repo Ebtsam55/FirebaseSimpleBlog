@@ -95,7 +95,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (internetConnection.checkConnection(getApplicationContext())) {
+                if (internetConnection.isConnected(getApplicationContext())) {
 
                     successfulLogin = false;
                     String signMailStr = signMail.getText().toString();
@@ -218,7 +218,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (internetConnection.checkConnection(getApplicationContext())) {
+        if (internetConnection.isConnected(getApplicationContext())) {
 
             progressDialog.setMessage("start signing in ....");
             progressDialog.show();

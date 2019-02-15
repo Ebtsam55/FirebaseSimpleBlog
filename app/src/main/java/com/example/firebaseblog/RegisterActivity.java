@@ -68,7 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
         signUpButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (internetConnection.checkConnection(getApplicationContext())) {
+                if (internetConnection.isConnected(getApplicationContext())) {
 
 
                     final String userNameStr = userName.getText().toString();

@@ -75,7 +75,7 @@ public class PostActivity extends AppCompatActivity {
         submit_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (internetConnection.checkConnection(getApplicationContext())) {
+                if (internetConnection.isConnected(getApplicationContext())) {
                     startPosting();
                 } else {
                     Toast.makeText(getApplicationContext(), "Check your Internet Connection ", Toast.LENGTH_SHORT).show();
