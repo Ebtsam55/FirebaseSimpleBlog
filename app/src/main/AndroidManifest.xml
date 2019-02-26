@@ -21,7 +21,7 @@
             android:theme="@style/Base.Theme.AppCompat" />
 
         <activity android:name=".SetupActivity"></activity>
-        <activity android:name=".LoginActivity" >
+        <activity android:name=".HomeActivity" >
             <intent-filter>
             <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +30,9 @@
         </activity>
         <activity android:name=".RegisterActivity" />
         <activity android:name=".PostActivity" />
-        <activity android:name=".HomeActivity"/>
+        <activity android:name=".LoginActivity"/>
+        <activity android:name=".PostDetailsActivity"/>
+
 
 
     </application>

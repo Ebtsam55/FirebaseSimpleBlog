@@ -8,6 +8,7 @@ import android.os.Bundle;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -26,6 +27,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.like.LikeButton;
+import com.like.OnLikeListener;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
@@ -37,6 +40,7 @@ public class HomeActivity extends AppCompatActivity {
     private  DatabaseReference mDatabaseUsers;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
+    private DatabaseReference mDatabaseLikes;
 
 
 
@@ -54,6 +58,9 @@ public class HomeActivity extends AppCompatActivity {
 
         blogRef = FirebaseDatabase.getInstance().getReference().child("Blog");
         blogRef.keepSynced(true);
+
+        mDatabaseLikes = FirebaseDatabase.getInstance().getReference().child("Likes");
+        mDatabaseLikes.keepSynced(true);
 
 
         mAuth=FirebaseAuth.getInstance();
@@ -99,12 +106,42 @@ public class HomeActivity extends AppCompatActivity {
 
         final  FirebaseRecyclerAdapter<Blog, BlogViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<Blog, BlogViewHolder>(options) {
             @Override
-            protected void onBindViewHolder(@NonNull BlogViewHolder holder, int position, @NonNull Blog model) {
+            protected void onBindViewHolder(@NonNull final BlogViewHolder holder, int position, @NonNull Blog model) {
+                final String post_key = getRef(position).getKey();
 
                 holder.setTitle(model.getTitle());
                 holder.setDescription(model.getDescription());
                 holder.setImage(getBaseContext(),model.getImage());
                 holder.setUserName(model.getUserName());
+
+                holder.setLikeButton(post_key);
+
+                holder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        //Toast.makeText(getApplicationContext(),post_key,Toast.LENGTH_SHORT).show();
+
+                        Intent postDetailsIntent = new Intent(HomeActivity.this, PostDetailsActivity.class);
+                        postDetailsIntent.putExtra("blog_id", post_key);
+                        startActivity(postDetailsIntent);
+
+                    }
+                });
+
+
+                holder.like_button.setOnLikeListener(new OnLikeListener() {
+                    @Override
+                    public void liked(LikeButton likeButton) {
+                        mDatabaseLikes.child(post_key).child(mAuth.getCurrentUser().getUid()).setValue("Random value");
+                        holder.like_button.setLiked(true);
+                    }
+
+                    @Override
+                    public void unLiked(LikeButton likeButton) {
+                        mDatabaseLikes.child(post_key).child(mAuth.getCurrentUser().getUid()).removeValue();
+                        holder.like_button.setLiked(false);
+                    }
+                });
 
             }
 
@@ -125,10 +162,53 @@ public class HomeActivity extends AppCompatActivity {
 
     public static class BlogViewHolder extends RecyclerView.ViewHolder {
         View mView;
+        TextView post_title;
+        LikeButton like_button;
+        DatabaseReference mDatabaseLikes;
+        FirebaseAuth mAuth;
 
         public BlogViewHolder(@NonNull View itemView) {
             super(itemView);
+
             mView = itemView;
+
+            like_button = mView.findViewById(R.id.fav_heart);
+
+            post_title = mView.findViewById(R.id.post_title);
+
+            mAuth = FirebaseAuth.getInstance();
+
+            mDatabaseLikes = FirebaseDatabase.getInstance().getReference().child("Likes");
+
+            mDatabaseLikes.keepSynced(true);
+
+            post_title.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Log.i("statuss", "u have clicked the title ");
+                }
+            });
+        }
+
+        public void setLikeButton(final String post_key) {
+            if (mAuth.getCurrentUser() != null) {
+                mDatabaseLikes.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                        if (dataSnapshot.child(post_key).hasChild(mAuth.getCurrentUser().getUid())) {
+                            like_button.setLiked(true);
+                        } else {
+                            like_button.setLiked(false);
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError databaseError) {
+
+                    }
+                });
+            }
         }
 
         public void setTitle(String title) {
