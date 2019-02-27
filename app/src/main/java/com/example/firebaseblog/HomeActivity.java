@@ -252,26 +252,27 @@ public class HomeActivity extends AppCompatActivity {
     //check if user exits in Database
     private void checkUserExit()
     {   FirebaseUser user = mAuth.getCurrentUser();
-        final String user_id = user.getUid();
+        if(user!=null) {
+            final String user_id = user.getUid();
 
-        mDatabaseUsers.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(!dataSnapshot.hasChild(user_id))
-                {
-                    Intent setupIntent = new Intent(HomeActivity.this,SetupActivity.class);
-                   setupIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    startActivity(setupIntent);
+            mDatabaseUsers.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    if (!dataSnapshot.hasChild(user_id)) {
+                        Intent setupIntent = new Intent(HomeActivity.this, SetupActivity.class);
+                        setupIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        startActivity(setupIntent);
+                    }
+
+
                 }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+                }
+            });
+        }
     }
 
     @Override
